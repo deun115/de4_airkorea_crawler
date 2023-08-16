@@ -9,6 +9,7 @@ from airkorea_api import request_airkorea_api, parse_airdata
 from utils import get_datalake_bucket_name, get_datalake_raw_layer_path
 from kafka import send_stream
 
+# TEST
 # etl 과정 중 e에 해당하는 과정
 # control+alt+l -> 라인 자동 정렬 (=convention sync)
 
