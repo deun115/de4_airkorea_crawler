@@ -2,6 +2,7 @@ import json                     # built-in library
 
 import dotenv                   # installed packages library
 import pyarrow as pa
+import fire
 
 from s3 import parquet_to_s3    # customed codes
 from airkorea_api import request_airkorea_api, parse_airdata
@@ -12,7 +13,15 @@ from kafka import send_stream
 # control+alt+l -> 라인 자동 정렬 (=convention sync)
 
 
-def run_extract(mode="batch"):
+def run_extract(mode):
+    """
+    airkorea의 REST API를 활용해서 대기질 정보를 가져옵니다.
+    배치 모드일 때에는 대상 스토리지(S3)에 저장되고,
+    스트리밍 모드일 때에는 카프카로 전송됩니다.
+
+    :param mode: 배치 혹은 스트리밍 ('batch' | 'streaming')
+    :return: None
+    """
     dotenv.load_dotenv()
     # 프로젝트 내부에 .env 파일이 있는지 먼저 검사하고, 해당하는 환경 변수를 가져오게 됨
     response = request_airkorea_api(
@@ -66,4 +75,6 @@ def run_extract(mode="batch"):
 
 
 if __name__ == '__main__':
-    run_extract(mode="streaming")
+    fire.Fire({
+        "extract": run_extract
+    })
